@@ -3,6 +3,7 @@ import openpyxl
 from openpyxl import Workbook
 from bs4 import BeautifulSoup
 from datetime import datetime
+from openpyxl.chart import LineChart, Reference
 
 # Empty list to store the cleaned buy/sell prices
 price_list = []
@@ -35,5 +36,11 @@ except FileNotFoundError:
 # whether the file was just created or already existed
 sheet = wb.active
 sheet.append([now, price_list[0], price_list[1]])
+
+chart = LineChart()
+data = Reference(sheet, min_col = 2, min_row = 1, max_row = sheet.max_row)
+chart.add_data(data, titles_from_data = True)
+sheet._charts = []
+sheet.add_chart(chart, "E2")
 
 wb.save("Dolar Tracker.xlsx")

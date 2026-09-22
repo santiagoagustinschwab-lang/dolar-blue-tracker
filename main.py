@@ -17,7 +17,12 @@ prices = html.find_all("div", class_="value")
 
 # Remove the leading "$" from each price with slicing and store the clean values
 for price in prices:
-    price_list.append(price.text[1:])
+    price_WO_dolar = price.text[1:]
+    price_trasnform = price_WO_dolar.replace(".", "")
+    price_trasnform = price_trasnform.replace(",", ".")
+    final_price = float(price_trasnform)
+    price_list.append(final_price)
+
 
 # Current date and time, formatted as day/month/year hour:minute
 now = datetime.now().strftime("%d/%m/%y %H:%M")

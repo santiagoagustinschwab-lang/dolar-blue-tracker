@@ -18,14 +18,14 @@ prices = html.find_all("div", class_="value")
 # Remove the leading "$" from each price with slicing and store the clean values
 for price in prices:
     price_WO_dolar = price.text[1:]
-    price_trasnform = price_WO_dolar.replace(".", "")
+    price_trasnform = price_WO_dolar.replace(".", ""  )
     price_trasnform = price_trasnform.replace(",", ".")
     final_price = float(price_trasnform)
     price_list.append(final_price)
 
 
 # Current date and time, formatted as day/month/year hour:minute
-now = datetime.now().strftime("%d/%m/%y %H:%M")
+now = datetime.now().strftime("%d/%m/%y")
 
 # Try to open the existing tracker file. If it doesn't exist yet,
 # create it and add the header row (this only runs once, the first time)
@@ -43,8 +43,10 @@ sheet = wb.active
 sheet.append([now, price_list[0], price_list[1]])
 
 chart = LineChart()
-data = Reference(sheet, min_col = 2, min_row = 1, max_row = sheet.max_row)
-chart.add_data(data, titles_from_data = True)
+price_time_line = Reference(sheet, min_col = 2, max_col = 3, min_row = 1, max_row = sheet.max_row)
+chart.add_data(price_time_line, titles_from_data = True)
+date_time_line = Reference(sheet, min_col = 1, min_row = 2, max_row = sheet.max_row)
+chart.set_categories(date_time_line)
 sheet._charts = []
 sheet.add_chart(chart, "E2")
 
